@@ -12,6 +12,24 @@ const router = createRouter({
     {
       path: "/:tourId",
       component: () => import("../views/Tour/TourLayout.vue"),
+      children: [
+        {
+          path: "",
+          name: "tour",
+          component: () => import("../views/Tour/TourView.vue"),
+        },
+        {
+          path: ":floorId",
+          name: "floor",
+          component: () => import("../views/Tour/FloorView.vue"),
+        },
+
+        {
+          path: ":floorId/:hotspotId",
+          name: "hotspots",
+          component: () => import("../views/Tour/HotspotsView.vue"),
+        },
+      ],
     },
   ],
 });
