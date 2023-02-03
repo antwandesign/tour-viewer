@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Tour } from "@/types/tour";
+import type { Hotspot } from "@/types/hotspot";
 
 const instance = axios.create({
   baseURL: "https://api.bimtours.dev/v1/",
@@ -8,9 +9,21 @@ const instance = axios.create({
 
 const TOUR_ENDPOINT = "/tours/viewer/";
 
-export async function getTour(id: string, key: string): Promise<Tour> {
-  const TOURS_FETCH_URL = `${TOUR_ENDPOINT + id + "?key=" + key}`;
+export async function getTour(tourid: string, key: string): Promise<Tour> {
+  const TOURS_FETCH_URL = `${TOUR_ENDPOINT + tourid + "?key=" + key}`;
   console.log(TOURS_FETCH_URL);
+  const response = await instance.get(TOURS_FETCH_URL);
+  return response.data.data;
+}
+
+export async function getHotspot(
+  tourid: string,
+  hotspotId: string,
+  key: string
+): Promise<Hotspot[]> {
+  const TOURS_FETCH_URL = `${
+    TOUR_ENDPOINT + tourid + "/hotspots/" + hotspotId + "?key=" + key
+  }`;
   const response = await instance.get(TOURS_FETCH_URL);
   return response.data.data;
 }
