@@ -11,7 +11,6 @@ const TOUR_ENDPOINT = "/tours/viewer/";
 
 export async function getTour(tourid: string, key: string): Promise<Tour> {
   const TOURS_FETCH_URL = `${TOUR_ENDPOINT + tourid + "?key=" + key}`;
-  console.log(TOURS_FETCH_URL);
   const response = await instance.get(TOURS_FETCH_URL);
   return response.data.data;
 }
