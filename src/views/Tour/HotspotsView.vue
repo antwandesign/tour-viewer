@@ -1,16 +1,14 @@
 <template>
-  <div v-if="loading && store.tour" class="loading ">
-    <div class="loading-container">
-    <svg viewBox="0 0 1024 1024" class="animate-spin h-20 w-20 mr-3 fill-white">
-      <path
-        fill="ffffff"
-        d="M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 0 0-94.3-139.9 437.71 437.71 0 0 0-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z"
-      />
-    </svg>
-    </div>
-  </div>
+
+    <Loading v-if="loading && store.tour" />
+
+  <div v-if="!hasPhotos && !loading">No photos to show...</div>
+
   <div v-else class="sphere-viewer">
-    <SphereViewer/>
+    <div class="flex gap-5 my-5">
+        <img v-for="hotspot in hotspots" :src="hotspot.assets.thumbnail" @click="currentPhoto = hotspot.assets.hd">
+    </div>
+    <SphereViewer :image="currentPhoto || ''"/>
   </div>
 </template>
 <script setup lang="ts">
@@ -19,6 +17,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { getHotspot } from '@/services/tourService'
 import SphereViewer from '@/components/SphereViewer.vue'
+import Loading from '@/components/Loading.vue'
 import type { Structure, Hotspot } from '@/types/tour';
 import type { Hotspot as HotspotDetailed } from '@/types/hotspot'
 
@@ -40,10 +39,20 @@ const hotspot = structure?.hotspots.find((el: Hotspot) => el.id == hotspotId)
 //View state
 const hotspots = ref<HotspotDetailed[]>()
 const loading = ref(true)
+const currentPhoto = ref<string>()
+const hasPhotos = ref(false)
 
 onMounted(async () => {
-    hotspots.value = await getHotspot(tourId, hotspotId, key)
+    const res = await getHotspot(tourId, hotspotId, key)
+    if (res.length <= 0) {
+        hasPhotos.value = false
+        loading.value = false
+        return
+    }
+    hotspots.value = res
+    currentPhoto.value = hotspots.value[0].assets.hd
     loading.value = false
+    hasPhotos.value = true
 })
 
 </script>
