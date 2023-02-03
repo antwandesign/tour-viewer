@@ -9,13 +9,16 @@
     </svg>
     </div>
   </div>
-  {{ hotspots }}
+  <div v-else class="sphere-viewer">
+    <SphereViewer/>
+  </div>
 </template>
 <script setup lang="ts">
 import { useTourStore } from '@/stores/tourStore';
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import { getHotspot } from '@/services/tourService'
+import SphereViewer from '@/components/SphereViewer.vue'
 import type { Structure, Hotspot } from '@/types/tour';
 import type { Hotspot as HotspotDetailed } from '@/types/hotspot'
 
@@ -38,11 +41,11 @@ const hotspot = structure?.hotspots.find((el: Hotspot) => el.id == hotspotId)
 const hotspots = ref<HotspotDetailed[]>()
 const loading = ref(true)
 
-
 onMounted(async () => {
     hotspots.value = await getHotspot(tourId, hotspotId, key)
     loading.value = false
 })
+
 </script>
 <style>
 
