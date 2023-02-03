@@ -1,5 +1,5 @@
 <template>
-  This is TourLayout
+  <div class="mt-4">
   <div v-if="loading && store.tour" class="loading ">
     <div class="loading-container">
     <svg viewBox="0 0 1024 1024" class="animate-spin h-20 w-20 mr-3 fill-white">
@@ -11,6 +11,7 @@
     </div>
   </div>
   <RouterView v-else></RouterView>
+</div>
 </template>
 <script setup lang="ts">
 import { RouterView, useRoute } from "vue-router";
