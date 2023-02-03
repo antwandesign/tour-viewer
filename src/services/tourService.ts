@@ -8,7 +8,7 @@ const instance = axios.create({
 
 const TOUR_ENDPOINT = "/tours/viewer/";
 
-export async function getTour(id: string, key: string) {
+export async function getTour(id: string, key: string): Promise<Tour> {
   const TOURS_FETCH_URL = `${TOUR_ENDPOINT + id + "?key=" + key}`;
   console.log(TOURS_FETCH_URL);
   const response = await instance.get(TOURS_FETCH_URL);
