@@ -6,18 +6,20 @@
 <script setup lang='ts'>
 import { Viewer } from '@photo-sphere-viewer/core';
 import '@photo-sphere-viewer/core/index.scss';
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 interface Props {
-    image: string
+    image?: string
 }
 
+//Component definitons
 const props = defineProps<Props>()
 const viewerDiv = ref<HTMLElement>()
 let viewer: Viewer
 
+
+//Initialize viewer with a image recieved from props
 onMounted(() => {
-    //Initialize viewer with a image recieved from props
     viewer = new Viewer({
         container: viewerDiv.value as HTMLElement,
         panorama: props.image,
@@ -26,8 +28,20 @@ onMounted(() => {
         maxFov: 100
     });
 })
+
+//Change viewer photo when props get updated
 watch(props, () => {
-    viewer.setPanorama(props.image)
+    if (viewer) {
+        viewer.setPanorama(props.image)
+    }
+})
+
+//Destroy the viewer on unmount
+onUnmounted(() => {
+    if (viewer) {
+        viewer.destroy()
+    }
+
 })
 
 
