@@ -1,5 +1,6 @@
 <template>
   <div class="mt-4">
+    <Breadcrumbs/>
     <Loading  v-if="loading && store.tour" />
     <RouterView v-else></RouterView>
 </div>
@@ -11,6 +12,7 @@ import { getTour } from "@/services/tourService";
 import { ref, onMounted, onErrorCaptured } from "vue";
 import { useTourStore } from '@/stores/tourStore'
 import type { Tour } from "@/types/tour";
+import Breadcrumbs from '@/components/Breadcrumbs.vue';
 
 //State
 const loading = ref(true);
